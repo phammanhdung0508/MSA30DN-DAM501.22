@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Local environment and editor
+.venv/
+.env
+.vscode/
+
+# Downloaded datasets
+data/
+
+# Kaggle credentials
+kaggle.json
+.kaggle/
