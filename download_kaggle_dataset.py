@@ -6,7 +6,11 @@ import sys
 
 import kagglehub
 
-# https://www.kaggle.com/datasets/andyvo1009/real-estate-in-vietnam
+
+def dataset_to_folder_name(dataset_handle: str) -> str:
+    return dataset_handle.replace("/", "_")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Download a Kaggle dataset using kagglehub into a local folder."
@@ -19,14 +23,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--outdir",
         default="data/raw",
-        help="Destination folder to copy dataset files into.",
+        help="Base output folder.",
+    )
+    parser.add_argument(
+        "--no-dataset-subdir",
+        action="store_true",
+        help=(
+            "Copy files directly into --outdir. "
+            "Default behavior is --outdir/<owner_dataset>/"
+        ),
     )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    outdir = os.path.abspath(args.outdir)
+    base_outdir = os.path.abspath(args.outdir)
+    if args.no_dataset_subdir:
+        outdir = base_outdir
+    else:
+        outdir = os.path.join(base_outdir, dataset_to_folder_name(args.dataset))
     os.makedirs(outdir, exist_ok=True)
 
     try:
@@ -44,6 +60,7 @@ def main() -> int:
 
     files = sorted(os.listdir(outdir))
     print(f"Downloaded cache path: {source_dir}")
+    print(f"Dataset handle: {args.dataset}")
     print(f"Copied dataset to: {outdir}")
     print(f"Files in output: {files}")
     return 0
