@@ -128,3 +128,5 @@ Main outputs:
 - `data/processed/cresht2606_regression_cleaned.csv`
 - `data/processed/cresht2606_regression_flags.csv`
 - `data/processed/cresht2606_regression_cleaning_summary.json`
+
+# Trend and Evolution Analysis
