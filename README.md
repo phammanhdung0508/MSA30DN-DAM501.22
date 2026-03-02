@@ -130,3 +130,37 @@ Main outputs:
 - `data/processed/cresht2606_regression_cleaning_summary.json`
 
 # Trend and Evolution Analysis
+# Data mining pipeline: 10 steps
+# y: price, x: area 
+
+# Đánh giá kiểu định tính, Đánh giá kiểu định lượng.
+
+# |-context, problem.
+# |---descriptive
+# |---analytic
+# |---predictive
+# |---prescriptive
+# |-data requirment
+# |---what?
+# |---where?
+# |---how to collect?
+# |-method
+# |---frequent pattern
+# |---clustering
+# |---outliner 
+
+Đánh giá độ chính xác, đánh giá độ nhạy của thuật toán
+
+# Frequent Pattern Mining
+# - Support
+# - Confidence
+# - Lift
+# - 
+
+Data processing.
+1. chuẩn hóa vị trí.
+2. tạo giá diện tích.
+Dự đoán giá thuê bất động sản
+1. áp dụng outliner tìm bất thường
+2. gom cụm dùng clustering.
+3. xây dụng regresstion classification đưa ra nhãn liên tục
