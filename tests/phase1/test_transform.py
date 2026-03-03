@@ -70,17 +70,34 @@ class TransformTests(unittest.TestCase):
                     "frontage": 0.0,
                     "price_million_vnd": 0.0,
                 },
+                {
+                    "id": "4",
+                    "detail_url": "url-c",
+                    "title": "Missing location",
+                    "location": "",
+                    "timeline_hours": 1,
+                    "area_m2": 20.0,
+                    "bedrooms": 1,
+                    "bathrooms": 1,
+                    "floors": 1,
+                    "frontage": 0.0,
+                    "price_million_vnd": 2000.0,
+                },
             ]
         )
 
         fact_df = build_fact_dataframe(staging_df)
 
         # One row dropped by invalid price, one row deduped by detail_url.
-        self.assertEqual(len(fact_df), 2)
+        self.assertEqual(len(fact_df), 3)
 
         kept = fact_df[fact_df["listing_id"] == "1"].iloc[0]
         self.assertEqual(kept["title"], "A new")
         self.assertAlmostEqual(float(kept["price_per_m2"]), 120.0)
+
+        missing_location = fact_df[fact_df["listing_id"] == "4"].iloc[0]
+        self.assertEqual(missing_location["province"], "Unknown")
+        self.assertEqual(missing_location["district"], "Unknown")
 
 
 if __name__ == "__main__":

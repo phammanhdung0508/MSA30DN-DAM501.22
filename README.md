@@ -104,10 +104,13 @@ psql -h localhost -p 5432 -U postgres -d 'DAM501.22' \
 ```
 
 ## SQL Execution Order (SQL-only path)
+Python ETL (`etl/phase1_etl.py`) is the canonical transform path.
+`sql/phase1/03_transform_staging_to_fact.sql` is kept only as a legacy/manual fallback.
+
 1. `sql/phase1/01_create_staging.sql`
 2. `sql/phase1/01b_load_staging_from_csv.sql`
 3. `sql/phase1/02_create_warehouse_core.sql`
-4. `sql/phase1/03_transform_staging_to_fact.sql`
+4. `sql/phase1/03_transform_staging_to_fact.sql` (legacy fallback, not canonical)
 5. `sql/phase1/04_create_marts.sql`
 6. `sql/phase1/05_refresh_marts.sql`
 7. `sql/phase1/06_validation_checks.sql`
@@ -138,7 +141,7 @@ psql -h localhost -p 5432 -U postgres -d 'DAM501.22' -f sql/phase1/02_create_war
 - Time handling uses Option A: `timeline_hours` + `time_bucket`.
 
 ## Important Notes
-- ETL is full refresh (`TRUNCATE` then reload) for raw landing/staging/fact/marts.
+- ETL is full refresh for raw landing/staging/fact/marts using atomic table-replace steps.
 - Outliers are profiled and reported; they are not removed by default in current ETL.
 - ETL writes run metadata into `warehouse.etl_run_log` (status, row counts, quality metrics, error message).
 

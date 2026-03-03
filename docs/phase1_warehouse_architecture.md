@@ -31,6 +31,7 @@ flowchart LR
 - `warehouse.fact_listings`
   - Cleaned listing-level fact table.
   - Deduped and enriched with `price_per_m2`, `province`, `district`.
+  - Fallback location value: `Unknown` when province/district cannot be parsed.
 - `warehouse.dim_location`
   - Unique `(province, district)` pairs.
 - `warehouse.mart_market_analytics`
@@ -50,6 +51,7 @@ flowchart LR
   - remove accents,
   - normalize admin prefixes,
   - extract `province` and `district`.
+  - fallback to `Unknown` for unparsable location fields.
 
 ## Time Handling Decision
 - Chosen: Option A.

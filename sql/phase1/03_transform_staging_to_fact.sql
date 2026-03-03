@@ -1,3 +1,7 @@
+-- DEPRECATED PATH:
+-- Canonical transform logic is implemented in Python ETL (`etl/phase1/transform.py`).
+-- Keep this SQL for legacy/manual fallback only.
+--
 -- Full-refresh transform from staging to warehouse core.
 -- Primary business cleaning rules:
 -- 1) drop invalid price/area (<=0)
@@ -70,8 +74,8 @@ dedup AS (
     listing_id,
     detail_url,
     title,
-    INITCAP(province_raw) AS province,
-    INITCAP(district_raw) AS district,
+    COALESCE(NULLIF(INITCAP(province_raw), ''), 'Unknown') AS province,
+    COALESCE(NULLIF(INITCAP(district_raw), ''), 'Unknown') AS district,
     timeline_hours,
     area_m2,
     bedrooms,

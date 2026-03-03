@@ -93,6 +93,12 @@ def main() -> None:
             "min_fact_row_ratio": thresholds.min_fact_row_ratio,
         }
 
+        # Always land raw and typed staging first so failed gates are still auditable.
+        load_raw_landing(engine, raw_landing_df)
+        load_staging(engine, staging_df)
+        row_counts["raw_landing_rows"] = fetch_count(engine, "staging.stg_listings_raw_text")
+        row_counts["staging_rows"] = fetch_count(engine, "staging.stg_listings_raw")
+
         if not args.skip_quality_gate:
             enforce_quality_gate(quality_metrics, thresholds)
             quality_metrics["gate_passed"] = True
@@ -100,13 +106,9 @@ def main() -> None:
             quality_metrics["gate_passed"] = None
             quality_metrics["gate_skipped"] = True
 
-        load_raw_landing(engine, raw_landing_df)
-        load_staging(engine, staging_df)
         load_fact(engine, fact_df)
         refresh_location_dimension(engine)
 
-        row_counts["raw_landing_rows"] = fetch_count(engine, "staging.stg_listings_raw_text")
-        row_counts["staging_rows"] = fetch_count(engine, "staging.stg_listings_raw")
         row_counts["fact_rows"] = fetch_count(engine, "warehouse.fact_listings")
         row_counts["dim_location_rows"] = fetch_count(engine, "warehouse.dim_location")
 

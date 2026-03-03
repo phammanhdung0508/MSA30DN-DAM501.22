@@ -9,6 +9,7 @@ from typing import Any, Tuple
 
 import pandas as pd
 
+
 def remove_accents(value: Any) -> str:
     if value is None:
         return ""
@@ -106,6 +107,8 @@ def build_fact_dataframe(staging_df: pd.DataFrame) -> pd.DataFrame:
     province_district = df["location"].map(extract_location)
     df["province"] = province_district.map(lambda value: value[0])
     df["district"] = province_district.map(lambda value: value[1])
+    df["province"] = df["province"].astype("string").str.strip().replace("", pd.NA).fillna("Unknown")
+    df["district"] = df["district"].astype("string").str.strip().replace("", pd.NA).fillna("Unknown")
 
     df["price_per_m2"] = df["price_million_vnd"] / df["area_m2"]
 

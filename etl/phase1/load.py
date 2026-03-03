@@ -3,22 +3,39 @@
 
 from __future__ import annotations
 
+import uuid
+
 import pandas as pd
 from sqlalchemy.types import Integer, Numeric, Text
 
 
-def load_raw_landing(engine, raw_landing_df: pd.DataFrame) -> None:
-    with engine.begin() as conn:
-        conn.exec_driver_sql("TRUNCATE TABLE staging.stg_listings_raw_text;")
+def _atomic_replace_dataframe(engine, schema: str, table: str, df: pd.DataFrame, dtype: dict[str, object]) -> None:
+    tmp_table = f"__tmp_{table}_{uuid.uuid4().hex[:8]}"
+    qualified_target = f"{schema}.{table}"
+    qualified_tmp = f"{schema}.{tmp_table}"
 
-    raw_landing_df.to_sql(
-        name="stg_listings_raw_text",
+    with engine.begin() as conn:
+        df.to_sql(
+            name=tmp_table,
+            schema=schema,
+            con=conn,
+            if_exists="replace",
+            index=False,
+            chunksize=5000,
+            method="multi",
+            dtype=dtype,
+        )
+        conn.exec_driver_sql(f"TRUNCATE TABLE {qualified_target};")
+        conn.exec_driver_sql(f"INSERT INTO {qualified_target} SELECT * FROM {qualified_tmp};")
+        conn.exec_driver_sql(f"DROP TABLE {qualified_tmp};")
+
+
+def load_raw_landing(engine, raw_landing_df: pd.DataFrame) -> None:
+    _atomic_replace_dataframe(
+        engine=engine,
         schema="staging",
-        con=engine,
-        if_exists="append",
-        index=False,
-        chunksize=5000,
-        method="multi",
+        table="stg_listings_raw_text",
+        df=raw_landing_df,
         dtype={
             "id": Text(),
             "detail_url": Text(),
@@ -36,17 +53,11 @@ def load_raw_landing(engine, raw_landing_df: pd.DataFrame) -> None:
 
 
 def load_staging(engine, staging_df: pd.DataFrame) -> None:
-    with engine.begin() as conn:
-        conn.exec_driver_sql("TRUNCATE TABLE staging.stg_listings_raw;")
-
-    staging_df.to_sql(
-        name="stg_listings_raw",
+    _atomic_replace_dataframe(
+        engine=engine,
         schema="staging",
-        con=engine,
-        if_exists="append",
-        index=False,
-        chunksize=5000,
-        method="multi",
+        table="stg_listings_raw",
+        df=staging_df,
         dtype={
             "id": Text(),
             "detail_url": Text(),
@@ -64,17 +75,11 @@ def load_staging(engine, staging_df: pd.DataFrame) -> None:
 
 
 def load_fact(engine, fact_df: pd.DataFrame) -> None:
-    with engine.begin() as conn:
-        conn.exec_driver_sql("TRUNCATE TABLE warehouse.fact_listings;")
-
-    fact_df.to_sql(
-        name="fact_listings",
+    _atomic_replace_dataframe(
+        engine=engine,
         schema="warehouse",
-        con=engine,
-        if_exists="append",
-        index=False,
-        chunksize=5000,
-        method="multi",
+        table="fact_listings",
+        df=fact_df,
         dtype={
             "listing_id": Text(),
             "detail_url": Text(),

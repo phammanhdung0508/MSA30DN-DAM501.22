@@ -25,9 +25,9 @@
 ## 4) Core Warehouse Build
 1. Run `sql/phase1/02_create_warehouse_core.sql`.
 2. Evaluate quality gate thresholds before loading fact tables.
-3. Build cleaned fact with ETL script (recommended) or SQL transform script:
+3. Build cleaned fact with ETL script (canonical):
    - Python: `etl/phase1_etl.py`
-   - SQL fallback: `sql/phase1/03_transform_staging_to_fact.sql`
+   - SQL transform script `sql/phase1/03_transform_staging_to_fact.sql` is legacy fallback only.
 4. Populate `warehouse.dim_location` from distinct `(province, district)` pairs.
 5. Write run metadata to `warehouse.etl_run_log`.
 
