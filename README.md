@@ -106,6 +106,9 @@ psql -h localhost -p 5432 -U postgres -d 'DAM501.22' \
 ## SQL Execution Order (SQL-only path)
 Python ETL (`etl/phase1_etl.py`) is the canonical transform path.
 `sql/phase1/03_transform_staging_to_fact.sql` is kept only as a legacy/manual fallback.
+Legacy SQL transform is blocked by default and requires explicit opt-in:
+- pass `-v allow_legacy_sql_transform=1`
+- quality gate and `etl_run_log` are not applied in this path
 
 1. `sql/phase1/01_create_staging.sql`
 2. `sql/phase1/01b_load_staging_from_csv.sql`
@@ -136,7 +139,9 @@ psql -h localhost -p 5432 -U postgres -d 'DAM501.22' -f sql/phase1/02_create_war
 - Remove invalid `price_million_vnd <= 0`.
 - Remove invalid `area_m2 <= 0`.
 - Deduplicate by `detail_url` (fallback to `id` when URL missing).
+- Fail fast if duplicate `listing_id` still exists after deduplication (no silent row drop).
 - Normalize location into `province` and `district` (accent removal + prefix normalization).
+- Fallback location to `Unknown` when parsing fails.
 - Compute `price_per_m2 = price_million_vnd / area_m2`.
 - Time handling uses Option A: `timeline_hours` + `time_bucket`.
 

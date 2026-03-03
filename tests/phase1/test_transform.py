@@ -99,6 +99,41 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(missing_location["province"], "Unknown")
         self.assertEqual(missing_location["district"], "Unknown")
 
+    def test_build_fact_dataframe_raises_on_listing_id_conflict(self) -> None:
+        staging_df = pd.DataFrame(
+            [
+                {
+                    "id": "100",
+                    "detail_url": "url-a",
+                    "title": "A",
+                    "location": "Q 1, TP HCM",
+                    "timeline_hours": 1,
+                    "area_m2": 20.0,
+                    "bedrooms": 1,
+                    "bathrooms": 1,
+                    "floors": 1,
+                    "frontage": 1.0,
+                    "price_million_vnd": 2000.0,
+                },
+                {
+                    "id": "100",
+                    "detail_url": "url-b",
+                    "title": "B",
+                    "location": "Q 1, TP HCM",
+                    "timeline_hours": 2,
+                    "area_m2": 25.0,
+                    "bedrooms": 2,
+                    "bathrooms": 1,
+                    "floors": 1,
+                    "frontage": 1.0,
+                    "price_million_vnd": 2500.0,
+                },
+            ]
+        )
+
+        with self.assertRaisesRegex(ValueError, "Duplicate listing_id values remain"):
+            build_fact_dataframe(staging_df)
+
 
 if __name__ == "__main__":
     unittest.main()

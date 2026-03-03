@@ -2,6 +2,17 @@
 -- Canonical transform logic is implemented in Python ETL (`etl/phase1/transform.py`).
 -- Keep this SQL for legacy/manual fallback only.
 --
+-- Safety gate:
+-- This script is intentionally blocked unless explicitly enabled.
+-- Usage:
+-- psql ... -v allow_legacy_sql_transform=1 -f sql/phase1/03_transform_staging_to_fact.sql
+\if :{?allow_legacy_sql_transform}
+\echo 'Running legacy fallback SQL transform (quality gate + etl_run_log are not applied here).'
+\else
+\echo 'ERROR: Legacy SQL transform is disabled by default. Use etl/phase1_etl.py or pass -v allow_legacy_sql_transform=1.'
+\quit 1
+\endif
+--
 -- Full-refresh transform from staging to warehouse core.
 -- Primary business cleaning rules:
 -- 1) drop invalid price/area (<=0)

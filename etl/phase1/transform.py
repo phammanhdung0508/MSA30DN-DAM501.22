@@ -104,6 +104,14 @@ def build_fact_dataframe(staging_df: pd.DataFrame) -> pd.DataFrame:
     )
     df = df.drop_duplicates(subset=["_dedupe_key"], keep="first")
 
+    duplicate_listing_id_mask = df["id"].duplicated(keep=False)
+    if duplicate_listing_id_mask.any():
+        conflict_ids = sorted(df.loc[duplicate_listing_id_mask, "id"].astype(str).unique().tolist())[:10]
+        raise ValueError(
+            "Duplicate listing_id values remain after detail_url dedupe. "
+            f"Conflicting ids (sample): {conflict_ids}"
+        )
+
     province_district = df["location"].map(extract_location)
     df["province"] = province_district.map(lambda value: value[0])
     df["district"] = province_district.map(lambda value: value[1])
@@ -130,4 +138,4 @@ def build_fact_dataframe(staging_df: pd.DataFrame) -> pd.DataFrame:
         }
     )
 
-    return fact.drop_duplicates(subset=["listing_id"], keep="first")
+    return fact
