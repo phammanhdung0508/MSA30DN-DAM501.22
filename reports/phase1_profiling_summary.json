@@ -1,0 +1,240 @@
+{
+  "input_csv": "data/raw/cresht2606_vietnam-real-estate-datasets-catalyst/house_buying_dec29th_2025.csv",
+  "row_count": 66912,
+  "column_count": 11,
+  "columns": [
+    "id",
+    "detail_url",
+    "title",
+    "location",
+    "timeline_hours",
+    "area_m2",
+    "bedrooms",
+    "bathrooms",
+    "floors",
+    "frontage",
+    "price_million_vnd"
+  ],
+  "missing": {
+    "id": {
+      "count": 0,
+      "ratio": 0.0
+    },
+    "detail_url": {
+      "count": 7,
+      "ratio": 0.00010461501673840268
+    },
+    "title": {
+      "count": 0,
+      "ratio": 0.0
+    },
+    "location": {
+      "count": 0,
+      "ratio": 0.0
+    },
+    "timeline_hours": {
+      "count": 0,
+      "ratio": 0.0
+    },
+    "area_m2": {
+      "count": 16568,
+      "ratio": 0.24760879961740795
+    },
+    "bedrooms": {
+      "count": 11639,
+      "ratio": 0.17394488283118126
+    },
+    "bathrooms": {
+      "count": 15364,
+      "ratio": 0.22961501673840268
+    },
+    "floors": {
+      "count": 14634,
+      "ratio": 0.2187051649928264
+    },
+    "frontage": {
+      "count": 0,
+      "ratio": 0.0
+    },
+    "price_million_vnd": {
+      "count": 2103,
+      "ratio": 0.03142934002869441
+    }
+  },
+  "duplicate": {
+    "duplicate_id_rows": 0,
+    "duplicate_id_keys": 0,
+    "duplicate_detail_url_rows_all": 7,
+    "duplicate_detail_url_keys_all": 1,
+    "duplicate_detail_url_rows": 0,
+    "duplicate_detail_url_keys": 0,
+    "full_row_duplicates": 0
+  },
+  "invalid": {
+    "price_non_positive_count": 362,
+    "area_non_positive_count": 0,
+    "price_per_m2_non_positive_count": 360
+  },
+  "distribution": {
+    "price_million_vnd": {
+      "count": 64809,
+      "min": 0.0,
+      "p01": 9.570000000000011,
+      "p05": 1500.0,
+      "p25": 4600.0,
+      "p50": 7000.0,
+      "p75": 12800.0,
+      "p95": 38500.0,
+      "p99": 130000.0,
+      "max": 989000.0,
+      "mean": 13810.677154546436,
+      "std": 35144.73375177454
+    },
+    "area_m2": {
+      "count": 50344,
+      "min": 1.0,
+      "p01": 18.0,
+      "p05": 30.0,
+      "p25": 42.0,
+      "p50": 60.0,
+      "p75": 92.0,
+      "p95": 237.0,
+      "p99": 955.6999999999971,
+      "max": 62000000.0,
+      "mean": 1377.9767003019228,
+      "std": 276334.6635154331
+    },
+    "price_per_m2": {
+      "count": 50315,
+      "min": 0.0,
+      "p01": 0.08273240589198036,
+      "p05": 19.45945945945946,
+      "p25": 81.66666666666667,
+      "p50": 139.1304347826087,
+      "p75": 221.0072463768116,
+      "p95": 428.57142857142856,
+      "p99": 893.266666666667,
+      "max": 406000.0,
+      "mean": 213.00771617376097,
+      "std": 2394.8860080313634
+    }
+  },
+  "outlier_iqr": {
+    "price_million_vnd": {
+      "count": 5837,
+      "ratio": 0.09006465151445016,
+      "lower": -7700.0,
+      "upper": 25100.0
+    },
+    "area_m2": {
+      "count": 4288,
+      "ratio": 0.085174002860321,
+      "lower": -33.0,
+      "upper": 167.0
+    },
+    "price_per_m2": {
+      "count": 2491,
+      "ratio": 0.049508098976448374,
+      "lower": -127.34420289855073,
+      "upper": 430.018115942029
+    }
+  },
+  "location_analysis": {
+    "unique_location_raw": 280,
+    "top_location_raw": {
+      "Gò Vấp, Hồ Chí Minh": 3441,
+      "Đống Đa, Hà Nội": 3252,
+      "Tân Phú, Hồ Chí Minh": 3247,
+      "Bình Tân, Hồ Chí Minh": 3130,
+      "Long Biên, Hà Nội": 3111,
+      "Quận 12, Hồ Chí Minh": 2765,
+      "Thanh Xuân, Hà Nội": 2670,
+      "Cầu Giấy, Hà Nội": 2666,
+      "Tân Bình, Hồ Chí Minh": 2659,
+      "Hoàng Mai, Hà Nội": 2506,
+      "Hà Đông, Hà Nội": 2402,
+      "Bình Thạnh, Hồ Chí Minh": 2226,
+      "Thủ Đức, Hồ Chí Minh": 2202,
+      "Quận 8, Hồ Chí Minh": 2143,
+      "Hai Bà Trưng, Hà Nội": 1851,
+      "Quận 7, Hồ Chí Minh": 1665,
+      "Quận 9, Hồ Chí Minh": 1494,
+      "Ba Đình, Hà Nội": 1406,
+      "Tây Hồ, Hà Nội": 1369,
+      "Phú Nhuận, Hồ Chí Minh": 1249
+    },
+    "segment_count_distribution": {
+      "2": 66912
+    },
+    "unique_province_raw": 57,
+    "unique_district_raw": 274,
+    "top_province_raw": {
+      "Hồ Chí Minh": 32625,
+      "Hà Nội": 25708,
+      "Đà Nẵng": 1857,
+      "Đồng Nai": 1299,
+      "Bình Dương": 1089,
+      "Khánh Hòa": 1016,
+      "Hải Phòng": 880,
+      "Thừa Thiên Huế": 346,
+      "Thái Bình": 308,
+      "Long An": 231,
+      "Lâm Đồng": 224,
+      "Bắc Ninh": 177,
+      "Tây Ninh": 156,
+      "Bà Rịa Vũng Tàu": 113,
+      "Ninh Thuận": 85,
+      "Bình Thuận": 67,
+      "Hậu Giang": 66,
+      "Cần Thơ": 63,
+      "Quảng Ninh": 57,
+      "Đắk Lắk": 42
+    },
+    "top_district_raw": {
+      "Gò Vấp": 3441,
+      "Đống Đa": 3252,
+      "Tân Phú": 3248,
+      "Bình Tân": 3130,
+      "Long Biên": 3111,
+      "Quận 12": 2765,
+      "Thanh Xuân": 2670,
+      "Cầu Giấy": 2666,
+      "Tân Bình": 2659,
+      "Hoàng Mai": 2506,
+      "Hà Đông": 2402,
+      "Bình Thạnh": 2226,
+      "Thủ Đức": 2202,
+      "Quận 8": 2143,
+      "Hai Bà Trưng": 1851,
+      "Quận 7": 1665,
+      "Quận 9": 1494,
+      "Ba Đình": 1406,
+      "Tây Hồ": 1369,
+      "Phú Nhuận": 1249
+    },
+    "unique_province_normalized": 57,
+    "unique_district_normalized": 273,
+    "top_province_normalized": {
+      "ho chi minh": 32625,
+      "ha noi": 25708,
+      "da nang": 1857,
+      "dong nai": 1299,
+      "binh duong": 1089,
+      "khanh hoa": 1016,
+      "hai phong": 880,
+      "thua thien hue": 346,
+      "thai binh": 308,
+      "long an": 231,
+      "lam dong": 224,
+      "bac ninh": 177,
+      "tay ninh": 156,
+      "ba ria vung tau": 113,
+      "ninh thuan": 85,
+      "binh thuan": 67,
+      "hau giang": 66,
+      "can tho": 63,
+      "quang ninh": 57,
+      "dak lak": 42
+    }
+  }
+}
