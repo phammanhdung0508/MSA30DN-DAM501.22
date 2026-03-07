@@ -1,0 +1,7 @@
+feature,decision,why
+area_m2,keep_raw_plus_log_plus_cap,"Highly skewed with extreme tail; tree models can use raw+cap, linear models benefit from log."
+bedrooms_imputed,keep_raw_plus_cap,Count feature with moderate signal; no log transform needed.
+bathrooms_imputed,keep_raw_plus_cap,Count feature with strongest direct numeric relation to price in Phase 2.
+floors_imputed,keep_raw_plus_cap,Need capping because extreme values remain in source data.
+timeline_hours,keep_raw_plus_log_plus_bucket,Freshness effect is nonlinear and heavily right-skewed.
+frontage,convert_to_has_frontage,"Current source behaves like a boolean presence flag, not frontage width."

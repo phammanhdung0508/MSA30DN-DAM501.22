@@ -1,0 +1,217 @@
+{
+  "quality": {
+    "row_count": 49955,
+    "missing_table_csv": "reports/phase2/tables/quality_missing_summary.csv",
+    "numeric_ranges_csv": "reports/phase2/tables/quality_numeric_ranges.csv",
+    "duplicate_listing_id_rows": 0,
+    "duplicate_dedupe_key_rows": 0
+  },
+  "target": {
+    "price_skewness": 11.643720721856342,
+    "log_price_skewness": -1.577595345627502,
+    "price_per_m2_skewness": 128.7041266824741,
+    "figure": "reports/phase2/figures/target_distributions.png",
+    "log_transform_recommended": true
+  },
+  "location": {
+    "province_table_csv": "reports/phase2/tables/location_by_province.csv",
+    "district_table_csv": "reports/phase2/tables/location_by_district.csv",
+    "figure": "reports/phase2/figures/location_market_overview.png",
+    "top_province_by_listing_count": {
+      "province": "Ho Chi Minh",
+      "listing_count": 23269,
+      "median_price_million_vnd": 7180.0,
+      "median_price_per_m2": 107.6923076923077
+    },
+    "top_province_by_median_price_per_m2": {
+      "province": "Tra Vinh",
+      "listing_count": 4,
+      "median_price_million_vnd": 1300.0,
+      "median_price_per_m2": 650.0
+    }
+  },
+  "size": {
+    "corr_area_price": 0.07048528618340175,
+    "corr_area_price_per_m2": -0.0026633970611857397,
+    "outlier_table_csv": "reports/phase2/tables/size_outlier_candidates.csv",
+    "figure": "reports/phase2/figures/size_relationship_scatter.png"
+  },
+  "property_features": {
+    "bedrooms_stats_csv": "reports/phase2/tables/feature_bedrooms_stats.csv",
+    "floors_stats_csv": "reports/phase2/tables/feature_floors_stats.csv",
+    "corr_with_price": {
+      "bedrooms": 0.3099286952203319,
+      "bathrooms": 0.3243877402046166,
+      "floors": 0.05309235203614166,
+      "frontage": 0.1688999246112199
+    },
+    "figure": "reports/phase2/figures/property_feature_analysis.png"
+  },
+  "correlation": {
+    "matrix_csv": "reports/phase2/tables/correlation_matrix.csv",
+    "figure": "reports/phase2/figures/correlation_heatmap.png",
+    "strong_predictors": {
+      "bathrooms": 0.3243877402046166,
+      "bedrooms": 0.3099286952203319
+    },
+    "multicollinear_pairs": [
+      {
+        "feature_1": "bedrooms",
+        "feature_2": "bathrooms",
+        "corr": 0.9554405335137836
+      }
+    ]
+  },
+  "timeline": {
+    "timeline_table_csv": "reports/phase2/tables/timeline_bucket_summary.csv",
+    "figure": "reports/phase2/figures/timeline_analysis.png"
+  },
+  "mart_validation": {
+    "compared_group_count": 472,
+    "mismatch_group_count": 0,
+    "mismatch_table_csv": "reports/phase2/tables/mart_market_analytics_mismatches.csv"
+  },
+  "modeling_strategy": {
+    "missing_strategy": {
+      "decision": "retain_raw_and_use_imputed_plus_missing_flags",
+      "target_columns": [
+        "bedrooms",
+        "bathrooms",
+        "floors"
+      ],
+      "imputed_columns": [
+        "bedrooms_imputed",
+        "bathrooms_imputed",
+        "floors_imputed"
+      ],
+      "missing_flag_columns": [
+        "bedrooms_missing",
+        "bathrooms_missing",
+        "floors_missing"
+      ],
+      "imputation_rule": "Use district median when at least 30 observed values exist for the feature; otherwise use province median when at least 30 observed values exist; otherwise fallback to the global median.",
+      "reason": "Median imputation is robust to skew/outliers, while missing flags preserve the signal that the seller omitted a property attribute.",
+      "observed_missing_pct": {
+        "bedrooms": 10.8458,
+        "bathrooms": 16.3968,
+        "floors": 21.8156
+      }
+    },
+    "outlier_strategy": {
+      "decision": "keep_rows_use_flags_and_compare_with_robust_subset",
+      "fact_table_policy": "Do not remove outliers from warehouse.fact_listings.",
+      "feature_flag_columns": [
+        "is_outlier_price",
+        "is_outlier_area",
+        "is_outlier_price_per_m2",
+        "is_outlier_any"
+      ],
+      "robust_subset_column": "is_robust_train_candidate",
+      "training_guidance": "Use full-data baseline with outlier flags as model features, and compare it with a robust training subset where is_robust_train_candidate = true.",
+      "reason": "This avoids silent data loss, keeps extreme listings auditable, and still enables robust-model experiments."
+    }
+  },
+  "avm_feature_recommendation": {
+    "feature_candidates": [
+      {
+        "feature": "area_m2",
+        "missing_pct": 0.0,
+        "reason": "Strong structural size signal for total price."
+      },
+      {
+        "feature": "bedrooms_imputed",
+        "missing_pct": 0.0,
+        "reason": "Location-aware median-imputed bedroom count for modeling."
+      },
+      {
+        "feature": "bathrooms_imputed",
+        "missing_pct": 0.0,
+        "reason": "Location-aware median-imputed bathroom count for modeling."
+      },
+      {
+        "feature": "floors_imputed",
+        "missing_pct": 0.0,
+        "reason": "Location-aware median-imputed floor count for modeling."
+      },
+      {
+        "feature": "bedrooms_missing",
+        "missing_pct": 0.0,
+        "reason": "Preserves the information that bedroom count was not disclosed."
+      },
+      {
+        "feature": "bathrooms_missing",
+        "missing_pct": 0.0,
+        "reason": "Preserves the information that bathroom count was not disclosed."
+      },
+      {
+        "feature": "floors_missing",
+        "missing_pct": 0.0,
+        "reason": "Preserves the information that floor count was not disclosed."
+      },
+      {
+        "feature": "frontage",
+        "missing_pct": 0.0,
+        "reason": "Commercial exposure and access proxy."
+      },
+      {
+        "feature": "province",
+        "missing_pct": 0.0,
+        "reason": "Macro regional price level."
+      },
+      {
+        "feature": "district",
+        "missing_pct": 0.0,
+        "reason": "Micro location premium."
+      },
+      {
+        "feature": "timeline_hours",
+        "missing_pct": 0.0,
+        "reason": "Listing freshness and pricing behavior."
+      },
+      {
+        "feature": "district_median_price_million_vnd",
+        "missing_pct": 0.0,
+        "reason": "Contextual market baseline by district."
+      },
+      {
+        "feature": "district_median_price_per_m2",
+        "missing_pct": 0.0,
+        "reason": "Location-normalized pricing baseline."
+      },
+      {
+        "feature": "is_outlier_price",
+        "missing_pct": 0.0,
+        "reason": "Flags atypical total-price observations for robust modeling decisions."
+      },
+      {
+        "feature": "is_outlier_area",
+        "missing_pct": 0.0,
+        "reason": "Flags atypical property size observations."
+      },
+      {
+        "feature": "is_outlier_price_per_m2",
+        "missing_pct": 0.0,
+        "reason": "Flags atypical unit-price observations."
+      },
+      {
+        "feature": "is_outlier_any",
+        "missing_pct": 0.0,
+        "reason": "Compact indicator that at least one outlier rule fired."
+      }
+    ],
+    "strong_numeric_predictors": {
+      "bathrooms": 0.3243877402046166,
+      "bedrooms": 0.3099286952203319
+    }
+  },
+  "key_insights": [
+    "Price distribution is right-skewed (skew=11.64), and log(price+1) reduces skew to -1.58.",
+    "Feature completeness is uneven: bedrooms/bathrooms/floors missing rates are 10.85%, 16.40%, and 21.82%.",
+    "Area has a positive relation with total price (corr=0.070), while relation with price_per_m2 is weaker (corr=-0.003).",
+    "Province-level market spread is large; top provinces by median price_per_m2 are significantly above the national median.",
+    "Timeline is highly imbalanced, with most listings in >30 days bucket; this can bias recency-based interpretation.",
+    "No duplicate listing_id or dedupe_key remains in fact_listings, indicating Phase 1 dedup logic is stable on current data.",
+    "Correlation matrix highlights candidate predictors for AVM from numeric block: bathrooms (0.32), bedrooms (0.31)",
+    "Market mart consistency check shows 0 mismatched groups over 472 compared groups."
+  ]
+}

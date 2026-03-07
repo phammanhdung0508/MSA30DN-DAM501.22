@@ -50,7 +50,31 @@ SELECT
 FROM warehouse.mart_avm_features
 WHERE location_id IS NULL;
 
--- 7) Latest ETL run status.
+-- 7) Outlier flag completeness in AVM mart.
+SELECT
+  SUM(CASE WHEN bedrooms_missing IS NULL THEN 1 ELSE 0 END) AS null_bedrooms_missing,
+  SUM(CASE WHEN bathrooms_missing IS NULL THEN 1 ELSE 0 END) AS null_bathrooms_missing,
+  SUM(CASE WHEN floors_missing IS NULL THEN 1 ELSE 0 END) AS null_floors_missing,
+  SUM(CASE WHEN bedrooms_imputed IS NULL THEN 1 ELSE 0 END) AS null_bedrooms_imputed,
+  SUM(CASE WHEN bathrooms_imputed IS NULL THEN 1 ELSE 0 END) AS null_bathrooms_imputed,
+  SUM(CASE WHEN floors_imputed IS NULL THEN 1 ELSE 0 END) AS null_floors_imputed,
+  SUM(CASE WHEN is_outlier_price IS NULL THEN 1 ELSE 0 END) AS null_is_outlier_price,
+  SUM(CASE WHEN is_outlier_area IS NULL THEN 1 ELSE 0 END) AS null_is_outlier_area,
+  SUM(CASE WHEN is_outlier_price_per_m2 IS NULL THEN 1 ELSE 0 END) AS null_is_outlier_price_per_m2,
+  SUM(CASE WHEN is_outlier_any IS NULL THEN 1 ELSE 0 END) AS null_is_outlier_any,
+  SUM(CASE WHEN is_robust_train_candidate IS NULL THEN 1 ELSE 0 END) AS null_is_robust_train_candidate,
+  SUM(CASE WHEN is_outlier_any THEN 1 ELSE 0 END) AS flagged_outlier_rows,
+  SUM(CASE WHEN is_robust_train_candidate THEN 1 ELSE 0 END) AS robust_train_candidate_rows
+FROM warehouse.mart_avm_features;
+
+-- 8) Raw-missing rows should be fully covered by imputed columns.
+SELECT
+  SUM(CASE WHEN bedrooms IS NULL AND bedrooms_imputed IS NULL THEN 1 ELSE 0 END) AS uncovered_bedrooms_missing,
+  SUM(CASE WHEN bathrooms IS NULL AND bathrooms_imputed IS NULL THEN 1 ELSE 0 END) AS uncovered_bathrooms_missing,
+  SUM(CASE WHEN floors IS NULL AND floors_imputed IS NULL THEN 1 ELSE 0 END) AS uncovered_floors_missing
+FROM warehouse.mart_avm_features;
+
+-- 9) Latest ETL run status.
 SELECT
   run_id,
   pipeline_name,

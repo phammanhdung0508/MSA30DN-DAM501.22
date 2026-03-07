@@ -1,0 +1,16 @@
+column,group,action,notes
+area_m2,numeric,keep_and_transform,"Keep raw area, add log/capped versions."
+bedrooms,numeric,exclude_raw,Use bedrooms_imputed plus bedrooms_missing from Phase 2.
+bathrooms,numeric,exclude_raw,Use bathrooms_imputed plus bathrooms_missing from Phase 2.
+floors,numeric,exclude_raw,Use floors_imputed plus floors_missing from Phase 2.
+frontage,numeric,reinterpret_as_boolean,"CSV stores frontage as boolean-like flag, so model with has_frontage."
+timeline_hours,numeric,keep_and_transform,"Keep raw timeline_hours, add imputed/log/bucket features."
+province,categorical,keep_and_encode,Keep raw for CatBoost and encode per model family.
+district,categorical,keep_and_encode,Keep raw district because micro-location carries strong pricing signal.
+district_median_price_million_vnd,derived,reuse_with_leakage_control,"Useful market context, but must be recomputed from training data during model evaluation."
+district_median_price_per_m2,derived,reuse_with_leakage_control,"Useful market context, but must be recomputed from training data during model evaluation."
+is_outlier_area,derived,optional_predictor,"Safe optional predictor because it is derived from area, not target."
+is_outlier_price,derived,analysis_only,Target-derived flag. Do not use as predictor.
+is_outlier_price_per_m2,derived,analysis_only,Target-derived flag. Do not use as predictor.
+is_outlier_any,derived,analysis_or_filter_only,Composite outlier flag includes target-derived rules; use for filtering experiments only.
+target_price_million_vnd,target,keep_target,Store raw target for reporting and inverse-transform interpretation.

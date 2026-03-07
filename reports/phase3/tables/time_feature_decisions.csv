@@ -1,0 +1,6 @@
+feature,use_for,why
+timeline_hours_imputed,AVM and analytics,Continuous freshness feature with median fallback for any missing rows.
+timeline_log_hours,AVM,Compresses long-tail listing age.
+timeline_bucket,AVM and analytics,Stable categorical buckets for recency segmentation.
+is_new_listing,AVM and analytics,Simple binary freshness signal for first 72 hours.
+is_stale_listing,AVM and analytics,Separates long-tail inventory older than 30 days.
